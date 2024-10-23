@@ -3,13 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Webpage</title>
+  <title>Chat Widget</title>
+  <style>
+    #chat-widget {
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: 300px;
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      background-color: white;
+    }
+    #chat-box {
+      height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 5px;
+    }
+    #user-input {
+      width: 100%;
+      height: 40px;
+    }
+  </style>
 </head>
 <body>
-<h1>Welcome to my webpage!</h1>
-<p>This is hosted on GitHub Pages.</p>
+<div id="chat-widget">
+  <div id="chat-box"></div>
+  <textarea id="user-input" placeholder="Type your message here..."></textarea>
+  <button onclick="sendMessage()">Send</button>
+</div>
 
-<!-- Include your CDN script here -->
-<script src="https://your-cdn.com/script.js"></script>
+<script>
+  let userId = null; // Store userId for the session
+
+  // Fetch or create a new user when the chat is initiated
+  async function fetchOrCreateUser() {
+    try {
+      const response = await fetch('http://localhost:8080/start-chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+      userId = data.userId; // Save the user ID in this session
+    } catch (error) {
+      console.error('Error starting chat:', error);
+    }
+  }
+
+  // Send message to backend
+  async function sendMessage() {
+    if (!userId) {
+      await fetchOrCreateUser(); // Ensure user is created before sending a message
+    }
+
+    const message = document.getElementById('user-input').value;
+    fetch('http://localhost:8080/send-chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message, userId })
+    }).then(response => response.json())
+            .then(data => {
+              document.getElementById('user-input').value = '';
+              displayMessage('You: ' + message);
+            }).catch(error => {
+      console.error('Error:', error);
+    });
+  }
+
+  function displayMessage(message) {
+    const chatBox = document.getElementById('chat-box');
+    const newMessage = document.createElement('div');
+    newMessage.textContent = message;
+    chatBox.appendChild(newMessage);
+  }
+
+  // Automatically create a user when the widget loads
+  window.onload = fetchOrCreateUser;
+</script>
 </body>
 </html>
