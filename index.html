@@ -39,7 +39,7 @@
   // Fetch or create a new user when the chat is initiated
   async function fetchOrCreateUser() {
     try {
-      const response = await fetch('http://localhost:8080/start-chat', {
+      const response = await fetch('https://loving-massive-bull.ngrok-free.app/start-chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -60,7 +60,7 @@
     }
 
     const message = document.getElementById('user-input').value;
-    fetch('http://localhost:8080/send-chat', {
+    fetch('https://loving-massive-bull.ngrok-free.app/send-chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
