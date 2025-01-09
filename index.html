@@ -37,7 +37,7 @@
             location.reload();
         }
 
-        const savedEnvironment = localStorage.getItem('environment') || 'dev';
+        const savedEnvironment = localStorage.getItem('environment') || 'cloud';
         const apiUrl = savedEnvironment === 'cloud'
             ? "https://super-sales-api-smart-buy-jk7idose7a-uc.a.run.app"
             : "https://loving-massive-bull.ngrok-free.app";
