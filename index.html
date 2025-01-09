@@ -1,32 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Super Sales Chat Widget</title>
-  <script>
-    window.ChatWidgetConfig = {
-      API_URL: "https://super-sales-api-smart-buy-jk7idose7a-uc.a.run.app",
-      TEAM_ID: "d9c6c9-2.myshopify.com",
-      ENV: "dev",
-      BOT_NAME: "SmartBuy Bot",
-      THEME_SETTINGS: {
-        backgroundColor: 'rgb(255, 221, 0)',
-        textColor: '#000000',
-        secondaryTextColor: "#000000",
-        headerText: "Our virtual assistant is here to help you.",
-        welcomeMessage: undefined,
-        textFont: "fantasy",
-        botAvatar: undefined
-      }
+    <head>
+    <meta charset="UTF-8">
+    <title>Super Sales Chat Widget</title>
+    <script>
+        // Function to set environment and reload the page
+        function toggleEnvironment() {
+            const toggle = document.getElementById('envToggle');
+            const isCloud = toggle.checked;
+            const newEnvironment = isCloud ? 'cloud' : 'dev';
 
-    }
-  </script>
-  <script src="./super-sales-smartbuy-chatbot-bundle.js"></script>
+            // Save the selected environment in localStorage
+            localStorage.setItem('environment', newEnvironment);
 
+            // Set the correct API_URL based on the selected environment
+            const apiUrl = isCloud
+                ? "https://super-sales-api-smart-buy-jk7idose7a-uc.a.run.app"
+                : "https://loving-massive-bull.ngrok-free.app";
+
+            window.ChatWidgetConfig = {
+                API_URL: apiUrl,
+                TEAM_ID: "d9c6c9-2.myshopify.com",
+                BOT_NAME: "StrykBot",
+                THEME_SETTINGS: {
+                    backgroundColor: 'black',
+                    textColor: 'white',
+                    secondaryTextColor: "grey",
+                    headerText: "Our virtual assistant is here to help you.",
+                    welcomeMessage: undefined,
+                    textFont: "fantasy",
+                    botAvatar: undefined
+                }
+            };
+
+            // Reload the page
+            location.reload();
+        }
+
+        const savedEnvironment = localStorage.getItem('environment') || 'dev';
+        const apiUrl = savedEnvironment === 'cloud'
+            ? "https://super-sales-api-smart-buy-jk7idose7a-uc.a.run.app"
+            : "https://loving-massive-bull.ngrok-free.app";
+
+
+        window.ChatWidgetConfig = {
+            API_URL: apiUrl,
+            TEAM_ID: "d9c6c9-2.myshopify.com",
+            ENV: "dev",
+            BOT_NAME: "SmartBuy Bot",
+            THEME_SETTINGS: {
+                backgroundColor: 'rgb(255, 221, 0)',
+                textColor: '#000000',
+                secondaryTextColor: "#000000",
+                headerText: "Our virtual assistant is here to help you.",
+                welcomeMessage: undefined,
+                textFont: "fantasy",
+                botAvatar: "https://github.com/urbullet/super-sales-demo/blob/main/assets/robot.png"
+            }
+
+        }
+
+        window.onload = function () {
+            const toggle = document.getElementById('envToggle');
+
+            // Set the toggle and API_URL based on saved environment
+            toggle.checked = savedEnvironment === 'cloud';
+        };
+    </script>
+    <script src="./super-sales-smartbuy-chatbot-bundle.js"></script>
+    <style>
+            .switch {
+                position: relative;
+                display: inline-block;
+                width: 60px;
+                height: 34px;
+            }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                transition: .4s;
+                border-radius: 34px;
+            }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                transition: .4s;
+                border-radius: 50%;
+            }
+
+            input:checked + .slider {
+                background-color: #2196F3;
+            }
+
+            input:checked + .slider:before {
+                transform: translateX(26px);
+            }
+
+            label {
+                margin-left: 10px;
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                color: black;
+            }
+
+            .toggle-container {
+                margin: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .env-label {
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+            }
+        </style>
 </head>
-<body>
-<noscript>You need to enable JavaScript to run this app.</noscript>
-<div id="root"></div>
-</body>
+
+    <body>
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div id="root"></div>
+
+        <!-- Toggle for environment -->
+        <div class="toggle-container">
+            <span class="env-label">Dev</span>
+            <label class="switch">
+                <input id="envToggle" onclick="toggleEnvironment()" type="checkbox">
+                <span class="slider"></span>
+            </label>
+            <span class="env-label">Cloud</span>
+        </div>
+    </body>
 </html>
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
