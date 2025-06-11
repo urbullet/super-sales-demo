@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+<head>
     <meta charset="UTF-8">
     <title>Super Sales Chat Widget</title>
     <script>
@@ -37,10 +37,26 @@
             location.reload();
         }
 
-        const savedEnvironment = localStorage.getItem('environment') || 'cloud';
+        function toggleDebug() {
+            const debug = document.getElementById('debugToggle');
+            const showDebug = debug.checked;
+
+            window.ChatWidgetConfig = {
+                ...window.ChatWidgetConfig,
+                debug: showDebug
+            };
+            // Save the debug value in localStorage
+            localStorage.setItem('debugLogs', showDebug);
+            // Reload the page
+            // location.reload();
+        }
+
+        const savedEnvironment = localStorage.getItem('environment') || 'dev';
         const apiUrl = savedEnvironment === 'cloud'
             ? "https://super-sales-api-smart-buy-jk7idose7a-uc.a.run.app"
             : "https://loving-massive-bull.ngrok-free.app";
+
+        const savedDebug = localStorage.getItem('debugLogs') || false;
 
 
         window.ChatWidgetConfig = {
@@ -49,105 +65,115 @@
             ENV: "dev",
             BOT_NAME: "SmartBuy Bot",
             THEME_SETTINGS: {
-                backgroundColor: 'rgb(255, 221, 0)',
-                textColor: '#000000',
-                secondaryTextColor: "#000000",
+                backgroundColor: 'black',
+                textColor: 'white',
+                secondaryTextColor: "grey",
                 headerText: "Our virtual assistant is here to help you.",
                 welcomeMessage: undefined,
                 textFont: "fantasy",
                 botAvatar: "https://raw.githubusercontent.com/urbullet/super-sales-demo/refs/heads/main/assets/robot.png"
-            }
+            },
+            debug: savedDebug
+        };
 
-        }
 
+        // Initialize the toggle based on saved environment
         window.onload = function () {
-            const toggle = document.getElementById('envToggle');
+            const envToggle = document.getElementById('envToggle');
+            const debugToggle = document.getElementById('debugToggle');
 
             // Set the toggle and API_URL based on saved environment
-            toggle.checked = savedEnvironment === 'cloud';
+            envToggle.checked = savedEnvironment === 'cloud';
+            debugToggle.checked = !!savedDebug;
         };
     </script>
     <script src="./super-sales-smartbuy-chatbot-bundle.js"></script>
     <style>
-            .switch {
-                position: relative;
-                display: inline-block;
-                width: 60px;
-                height: 34px;
-            }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
 
-            .switch input {
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
 
-            .slider {
-                position: absolute;
-                cursor: pointer;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: #ccc;
-                transition: .4s;
-                border-radius: 34px;
-            }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
 
-            .slider:before {
-                position: absolute;
-                content: "";
-                height: 26px;
-                width: 26px;
-                left: 4px;
-                bottom: 4px;
-                background-color: white;
-                transition: .4s;
-                border-radius: 50%;
-            }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
 
-            input:checked + .slider {
-                background-color: #2196F3;
-            }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
 
-            input:checked + .slider:before {
-                transform: translateX(26px);
-            }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
 
-            label {
-                margin-left: 10px;
-                font-family: Arial, sans-serif;
-                font-size: 14px;
-                color: black;
-            }
+        label {
+            margin-left: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: black;
+        }
 
-            .toggle-container {
-                margin: 20px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
+        .toggle-container {
+            margin: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-            .env-label {
-                font-family: Arial, sans-serif;
-                font-size: 14px;
-            }
-        </style>
+        .env-label {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+    </style>
 </head>
+<body>
+<noscript>You need to enable JavaScript to run this app.</noscript>
+<div id="root"></div>
 
-    <body>
-        <noscript>You need to enable JavaScript to run this app.</noscript>
-        <div id="root"></div>
+<!-- Toggle for environment -->
+<div class="toggle-container">
+    <span class="env-label">Dev</span>
+    <label class="switch">
+        <input type="checkbox" id="envToggle" onclick="toggleEnvironment()">
+        <span class="slider"></span>
+    </label>
+    <span class="env-label">Cloud</span>
+</div>
 
-        <!-- Toggle for environment -->
-        <div class="toggle-container">
-            <span class="env-label">Dev</span>
-            <label class="switch">
-                <input id="envToggle" onclick="toggleEnvironment()" type="checkbox">
-                <span class="slider"></span>
-            </label>
-            <span class="env-label">Cloud</span>
-        </div>
-    </body>
+<div class="toggle-container">
+    <span class="env-label">Log </span>
+    <label class="switch">
+        <input type="checkbox" id="debugToggle" onclick="toggleDebug()">
+        <span class="slider"></span>
+    </label>
+</div>
+</body>
 </html>
-<meta content="width=device-width, initial-scale=1, minimum-scale=1" name="viewport"/>
